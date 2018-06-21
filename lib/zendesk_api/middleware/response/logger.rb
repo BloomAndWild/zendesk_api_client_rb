@@ -16,14 +16,14 @@ module ZendeskAPI
         end
 
         def call(env)
-          @logger.info "#{env[:method]} #{env[:url].to_s}"
+          @logger.debug "#{env[:method]} #{env[:url].to_s}"
           @logger.debug dump_debug(env, :request_headers)
 
           @app.call(env).on_complete do |env|
             info = "Status #{env[:status]}"
             info.concat(" #{env[:body].to_s[0, LOG_LENGTH]}") if (400..499).cover?(env[:status].to_i)
 
-            @logger.info info
+            @logger.debug info
             @logger.debug dump_debug(env, :response_headers)
           end
         end
